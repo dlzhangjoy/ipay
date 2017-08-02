@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+    layout:decorator="base/layout">
+<head>
+    <title>会员管理</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div layout:fragment="content" style="width:66%;margin-left:auto;margin-right:auto;">
+    <div style="font-size:18px;">
+         <table class="table table-striped">
+			<tr>
+              <th>会员ID</th>
+              <th>会员名称</th>
+              <th>会员类型</th>
+			  <th>创建时间</th>
+            </tr>
+            <tr th:each="prod : ${mainData.result}">
+              <td th:text="${prod.memberId}">Onions</td>
+              <td th:text="${prod.memberName}">2.41</td>
+              <td th:text="${prod.memberType}">2.41</td>
+			  <td th:text="${#dates.format(prod.createTime, 'yyyy-MM-dd HH:mm:ss')}">2.41</td>
+            </tr>
+    	 </table>
+		 <nav>
+            <ul class="pagination">
+                <li><a href="">&laquo;</a></li>
+
+                <li>
+                    <a th:if="${mainData.pageSize gt 1}" th:href="@{${'/member/query'}(pageNum=${mainData.pageNum-1},pageSize=${mainData.pageSize})}">Previous</a>
+                    <a th:if="${mainData.pageSize lt 2}" href="javascript:void(0);">Previous</a>
+                </li>
+
+                <li th:each="pageNo : ${#numbers.sequence(1, mainData.pages)}">
+                    <a th:if="${mainData.pageNum eq pageNo}" href="javascript:void(0);">
+                         <span th:text="${pageNo}"></span>
+                    </a>
+
+                    <a th:if="${not (mainData.pageNum eq pageNo)}" th:href="@{${'/member/query'}(pageNum=${pageNo},size=${mainData.pageSize})}">
+                        <span th:text="${pageNo}"></span>
+                    </a>
+                </li>
+                <li>
+                        <a th:if="${mainData.pageSize gt 1}" th:href="@{${'/member/query'}(pageNum=${mainData.pageNum+1},size=${mainData.pageSize})}">Next</a>
+                        <a th:if="${mainData.pageSize lt 2}" href="javascript:void(0);">Next</a>
+                    </li>
+
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </nav>
+     </div>
+
+     <div style="margin:20px;">
+     </div>  	 	 
+  </div>
+</body>
+</html>

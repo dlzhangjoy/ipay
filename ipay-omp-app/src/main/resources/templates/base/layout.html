@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+
+    <meta charset="utf-8" />
+    <title>首页</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css" 
+        th:href="@{/bootstrap/css/bootstrap.min.css}" />
+
+    <style type="text/css"> 
+        body{
+            font-family:微软雅黑;
+            font-size:14px;
+        }
+    </style>    
+
+</head>
+
+<body>
+    <div th:fragment="topnav">
+    <nav class="navbar navbar-default" style="background: none repeat scroll 0 0 #394755;color:#fff;height:60px;">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+       <div class="navbar-header" style="margin-right:20%;">
+          <a class="navbar-brand" href="/mainframe" style="color:#fff;" th:text="#{operation.management.platform}">运营管理后台</a>
+       </div>
+        
+        <!-- 退出 -->       
+        <a class="navbar-brand" href="#" style="color:#fff;float:right;" onclick="javascript:safeLogoutFun();" th:text="#{login.out}">退出</a>
+		<a class="navbar-brand" href="#" style="color:#fff;float:right;" onclick="javascript:writeCookie('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE','en_US')">English</a>     
+        <a class="navbar-brand" href="#" style="color:#fff;float:right;" onclick="javascript:writeCookie('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE','zh_CN')">中文</a>
+       <!-- 欢迎语 -->
+       <div class="navbar-brand" style="margin-right:30px;font-size:15px;float:right;color:#f5d313;">
+                    <label th:text="#{welcome}"></label> , <span> Peter</span>
+           <span id="time"></span>
+             <script th:inline="javascript">
+                  /*<![CDATA[*/
+                    function setTime(){
+                     var dt=new Date();
+                     var arr_week=new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+                     var strWeek=arr_week[dt.getDay()];
+                     var strHour=dt.getHours();
+                     var strMinutes=dt.getMinutes();
+                     var strSeconds=dt.getSeconds();
+                     if (strMinutes<10) strMinutes="0"+strMinutes;
+                     if (strSeconds<10) strSeconds="0"+strSeconds;
+                     var strYear=dt.getFullYear()+"-";
+                     var strMonth=(dt.getMonth()+1)+"-";
+                     var strDay=dt.getDate()+"";
+                     var strTime=strHour+":"+strMinutes+":"+strSeconds;
+                     //time.innerHTML=strYear+strMonth+strDay+" "+strTime+"  "+strWeek;   
+                    }
+                    setInterval("setTime()",1000);
+                    function writeCookie(cookieName,cookieValue){
+                        $.cookie(cookieName,cookieValue,{expires:365});
+                        window.location.reload();
+                    }
+
+                    //20151013  安全退出
+                    function safeLogoutFun(){
+                        if(confirm("确定需要退出吗？")){
+                            $.ajax({
+                                type: "POST",
+                                url: "safeLogout",
+                                dataType: "json",
+                                error:function(){
+                                    alert("退出失败");
+                                },
+                                success: function(responseInfo)
+                                {
+                                    //
+                                    if(responseInfo.status == 0){
+                                         window.location.replace("index"); 
+                                         //window.event.returnValue = false;//取消默认事件的处理
+                                    }
+
+                                    //
+                                    if(responseInfo.status == 1){
+                                        alert("退出失败");
+                                    }
+                                }
+                            });//end ajax
+                        }//end if confirm
+                    }
+                /*]]>*/
+            </script> 
+       </div>
+
+     </div>
+  </nav>
+  </div> <!-- 导航条 -->
+
+  <div layout:fragment="content"></div>
+
+  <!-- put the scripts below -->
+  <script src="../../static/jquery/jquery.min.js"
+        th:src="@{/jquery/jquery.min.js}"></script>
+  <script src="../../static/jquery/jquery.cookie.js"
+        th:src="@{/jquery/jquery.cookie.js}"></script>
+  <script src="../../static/bootstrap/js/bootstrap.min.js"
+        th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+
+</html>
