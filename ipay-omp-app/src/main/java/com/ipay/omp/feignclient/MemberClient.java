@@ -23,13 +23,13 @@ public class MemberClient {
 
 	public PageQueryResp<List<Member>> getUsersByUser(PageQueryReq<MemberQuery> req){
 		logger.info("{}",req);
-		PageQueryResp<List<Member>> resp=memberFeign.getUsersByPage(req);
+		PageQueryResp<List<Member>> resp=memberFeign.getMembersByPage(req);
 		logger.info("{}",resp);
 		return resp;
 	};
 	public BaseResp<Member> getUserById(BaseReq<Integer> req){
 		logger.info("{}",req);
-		BaseResp<Member> resp= memberFeign.getUserById(req);
+		BaseResp<Member> resp= memberFeign.getMemberById(req);
 		logger.info("{}",resp);
     	return resp;
     }

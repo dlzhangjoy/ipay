@@ -1,6 +1,7 @@
 package com.ipay.member.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,16 @@ public class MemberServiceImpl implements MemberService{
 	public Page<MemberDO> getUsersByPage(MemberCriteria criteria,int pageNum,int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		return (Page<MemberDO>)memberDOMapper.selectByCriteria(criteria);
+	}
+
+	@Override
+	@CacheEvict(value="member",key="#record.getMemberId()")
+	public Integer updateMemberById(MemberDO record) {
+		return memberDOMapper.updateByPrimaryKeySelective(record);
+	}
+
+	@Override
+	@CacheEvict(value="member",allEntries=true)
+	public void reloadMember() {
 	}
 }

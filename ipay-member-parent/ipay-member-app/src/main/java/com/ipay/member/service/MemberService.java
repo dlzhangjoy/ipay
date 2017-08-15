@@ -6,4 +6,6 @@ import com.ipay.member.dao.model.MemberDO;
 public interface MemberService {
 	Page<MemberDO> getUsersByPage(MemberCriteria memberQuery,int pageNum,int pageSize);
 	MemberDO getUserById(Integer id);
+	Integer updateMemberById(MemberDO record);
+	void reloadMember();
 }

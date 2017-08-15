@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.Page;
-import com.ipay.core.enums.ReturnCode;
-import com.ipay.core.exception.ReturnCodeException;
 import com.ipay.core.req.BaseReq;
 import com.ipay.core.req.PageQueryReq;
 import com.ipay.core.resp.BaseResp;
@@ -32,7 +30,7 @@ public class MemberFeignImpl implements MemberFeign{
 	MemberService memberService;
 	
 	@Override
-	public PageQueryResp<List<Member>> getUsersByPage(@RequestBody PageQueryReq<MemberQuery> req) {
+	public PageQueryResp<List<Member>> getMembersByPage(@RequestBody PageQueryReq<MemberQuery> req) {
 		logger.info("{}",req);
 		PageQueryResp<List<Member>> rep=null;
 //		try{
@@ -71,14 +69,28 @@ public class MemberFeignImpl implements MemberFeign{
 	}
 
 	@Override
-	public BaseResp<Member> getUserById(@RequestBody BaseReq<Integer> req) {
+	public BaseResp<Member> getMemberById(@RequestBody BaseReq<Integer> req) {
 		MemberDO userDO= memberService.getUserById(req.getData());
 		Member user=new Member();
 		BeanUtils.copyProperties(userDO, user);
 		BaseResp<Member> resp=new BaseResp<Member>(user);
-		if(1==1)
-		throw new RuntimeException("test");
 		return resp;
+	}
+
+	@Override
+	public BaseResp<Integer> updateMemberById(@RequestBody BaseReq<Member> req) {
+		Member user=req.getData();
+		MemberDO userDO=new MemberDO();
+		BeanUtils.copyProperties(user,userDO);
+		Integer num=memberService.updateMemberById(userDO);
+		BaseResp<Integer> resp=new BaseResp<Integer>(num);
+		return resp;
+	}
+
+	@Override
+	public BaseResp<Void> clearMemberCache() {
+		memberService.reloadMember();
+		return new BaseResp<Void>();
 	}
 
 }

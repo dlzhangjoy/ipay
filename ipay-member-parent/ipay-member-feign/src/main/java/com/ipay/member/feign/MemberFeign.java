@@ -16,12 +16,17 @@ import com.ipay.member.feign.query.MemberQuery;
 
 
 @FeignClient(name="ipay-member-app",url="${ipay-member-app.url:}")
-@RequestMapping("/users")
+@RequestMapping("/members")
 public interface MemberFeign {
 	//分页查询用post，get会跟一堆参数
-	@RequestMapping(value = "/getUsersByPage", method = RequestMethod.POST)
-	PageQueryResp<List<Member>> getUsersByPage(@RequestBody PageQueryReq<MemberQuery> req);
+	@RequestMapping(value = "/getMembersByPage", method = RequestMethod.POST)
+	PageQueryResp<List<Member>> getMembersByPage(@RequestBody PageQueryReq<MemberQuery> req);
 	
-	@RequestMapping(value = "/getUserById", method = RequestMethod.POST)
-    BaseResp<Member> getUserById(@RequestBody BaseReq<Integer> req);
+	@RequestMapping(value = "/getMemberById", method = RequestMethod.POST)
+    BaseResp<Member> getMemberById(@RequestBody BaseReq<Integer> req);
+	
+	@RequestMapping(value = "/updateMemberById", method = RequestMethod.POST)
+    BaseResp<Integer> updateMemberById(@RequestBody BaseReq<Member> req);
+	@RequestMapping(value = "/clearMemberCache", method = RequestMethod.POST)
+	BaseResp<Void> clearMemberCache();
 }
